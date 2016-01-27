@@ -1,38 +1,114 @@
-<ion-view view-title="Friends">
-    <ion-content ng-class="{expanded:isExpanded}">
-        <div class="content has-header">
-            <div class="list animate-fade-slide-in-right">
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
-                    <img src="img/jon-snow.jpg">
-                    <h2>Jon Snow</h2>
-                    <p>Da illest illegitimate</p>
-                    <i class="icon ion-chatbubble muted"></i>
-                </a>
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
-                    <img src="img/daenerys.jpg">
-                    <h2>Daenerys Targaryen</h2>
-                    <p>Dragon mommy</p>
-                    <i class="icon ion-chatbubble muted"></i>
-                </a>
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
-                    <img src="img/arya.jpg">
-                    <h2>Arya Stark</h2>
-                    <p>Is Chuck Norris' fear</p>
-                    <i class="icon ion-chatbubble muted"></i>
-                </a>
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
-                    <img src="img/sansa.jpg">
-                    <h2>Sansa Stark</h2>
-                    <p>&amp; Joffrey <strike>sitting</strike> sat in a tree</p>
-                    <i class="icon ion-chatbubble muted"></i>
-                </a>
-                <a href="#/app/profile" class="item item-avatar item-icon-right">
-                    <img src="img/tyrion.jpg">
-                    <h2>Tyrion Lannister</h2>
-                    <p>B.A.M.F. imp</p>
-                    <i class="icon ion-chatbubble muted"></i>
-                </a>
-            </div>
-        </div>
-    </ion-content>
+<ion-view view-title="Register">
+  <ion-content ng-class="{expanded:$scope.isExpanded}">
+      <div class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
+          <div class="content">
+              <div class="avatar" style="background-image: url('img/logo.png');"></div>
+              <h3><a class="light">synAPPS Demo</a></h3>
+              <h4>Picture App</h4>
+          </div>
+      </div>
+      <div class="tabs tabs-dark tabs-icon-top static">
+          <a ui-sref="app.activity" class="tab-item">
+              <i class="icon ion-arrow-graph-up-right"></i> Activity
+          </a>
+          <a ui-sref="app.friends" class="tab-item">
+              <i class="icon ion-android-people"></i> Register
+          </a>
+          <a ui-sref="app.gallery" class="tab-item">
+              <i class="icon ion-images"></i> Photos
+          </a>
+      </div>
+      <h4 class="content padding double-padding-x">Registering</h4>
+      <div class="list animate-fade-slide-in-right">
+        <form id="register-form">
+                      <p style="padding-left:10px;"><input id="register-username" type="text" placeholder="username"></p>
+                      <p style="padding-left:10px;"><input id="register-password" type="password" placeholder="password"></p>
+                      <p style="padding-left:10px;"><input id="register-password-2" type="password" placeholder="password"></p>
+                      <p class="buttonWrapper buttonDefault buttonBolt"><input type="submit"></p>
+                      <button><a href="#login">Log In Link</a></button>
+        </form>
+            </br>
+            <p> The current user is...</p>
+            <div id="current-user"></div><br/>
+            </br>
+            <div id="logout" class="page">
+              <div class="content">
+                  <h2>Log Out Link</h2>
+              </div>
+          </div>
+
+      </div>
+  </ion-content>
 </ion-view>
+
+<script type="text/javascript">
+Parse.initialize("HPO14qrXOVv8i6NKQq5UJeGx07IUMDGY0fRhtK4z", "P1JI9V8KsBN88X0uwAfGh5FVngz4VU7Gc3GTWtrX");
+var Post = Parse.Object.extend("Post");
+
+function checkLogin() {
+  if (Parse.User.current()){
+    console.log("Logged in! "+Parse.User.current().get("username"));
+    $("#current-user").html("User: "+Parse.User.current().get("username"));
+  } else {
+      $("#current-user").html("");
+  }
+}
+
+checkLogin();
+
+// Register form
+$("#register-form").submit(function(event){
+    event.preventDefault();
+
+    var username = $("#register-username").val();
+    var password = $("#register-password").val();
+    var password2 = $("#register-password-2").val();
+
+    if (password === password2) {
+        var user = new Parse.User();
+        user.set("username", username);
+        user.set("password", password);
+
+        user.signUp(null, {
+            success:function(user){
+                console.log("Registration Succeeded!");
+                checkLogInStatus();
+            }, error:function(user, error){
+                console.log("Registration error:"+error.message);
+            }
+        });
+    }
+});
+
+
+// Login Form
+$("#login-form").submit(function(event){
+    event.preventDefault();
+
+    var username = $("#login-username").val();
+    var password = $("#login-password").val();
+
+    Parse.User.logIn(username, password, {
+        success: function(user){
+            console.log("Login succeeded!");
+            checkLogInStatus();
+        }, error: function(user, error){
+            console.log("Login error:"+error.message);
+        }
+    });
+});
+
+
+// Listen for page-show from logout
+$("#logout").on("page-show", function(event){
+    console.log("Log Out page-show!");
+    // Log Out with Parse
+    Parse.User.logOut();
+    checkLogInStatus();
+});
+
+$("#register").on("page-show", function(event){
+    console.log("Showing Register Page!");
+});
+
+</script>

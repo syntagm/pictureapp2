@@ -60,7 +60,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
         views: {
             'menuContent': {
                 templateUrl: 'templates/friends.html',
-                controller: 'FriendsCtrl'
+                controller: 'ProfileCtrl'
             },
             'fabContent': {
                 template: '<button id="fab-friends" class="button button-fab button-fab-top-left expanded button-energized-900 spin"><i class="icon ion-chatbubbles"></i></button>',
@@ -126,3 +126,112 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/login');
 });
+
+Parse.initialize("HPO14qrXOVv8i6NKQq5UJeGx07IUMDGY0fRhtK4z", "P1JI9V8KsBN88X0uwAfGh5FVngz4VU7Gc3GTWtrX");
+
+var TestObject = Parse.Object.extend("TestObject");
+var testObject = new TestObject();
+  testObject.save({foo: "bar2"}, {
+  success: function(object) {
+    $(".success").show();
+  },
+  error: function(model, error) {
+    $(".error").show();
+  }
+});
+
+Parse.User.enableRevocableSession()
+var Post = Parse.Object.extend("Post");
+function checkLogin() {
+  if (Parse.User.current()){
+    console.log("Logged in! "+Parse.User.current().get("username"));
+    $("#current-user").html("User: "+Parse.User.current().get("username"));
+  } else {
+      $("#current-user").html("");
+  }
+}
+
+checkLogin();
+
+$("#logout").click(function(event) {
+  Parse.User.logOut();
+  console.log("You are now logged out!");
+  checkLogin();
+});
+
+$("#login").submit(function(event){
+  event.preventDefault();
+  // this prevents people from refreshing the browser
+  var name = $("#login-name").val();
+  var pass = $("#login-password").val();
+  //so next we have to send parse the uname and pass
+  Parse.User.logIn(name, pass, {
+    success: function(user){
+      //success passes the user object back with a message
+      console.log("You are now logged in!");
+      checkLogin();
+    }, error: function(user, error){
+      console.log("Log in failed!"+error.message);
+    }
+  });
+});
+
+$("#signup").submit(function(event){
+  event.preventDefault();
+
+    var name = $("#signup-name").val();
+    var pass = $("#signup-password").val();
+
+    var user = new Parse.User();
+    user.set("username", name);
+    user.set("password", pass);
+
+    user.signUp(null, {
+      success: function(user){
+        checkLogin();
+      }, error: function(user, error){
+        console.log("signup error:"+error.message);
+      }
+    });
+  });
+
+function getPosts() {
+  var query = new Parse.Query(Post);
+  query.find({
+    success: function(results){
+      var output ="";
+      for (var i in results){
+          var title = results[i].get("title");
+          var content = results[i].get("content");
+          output += "<li>";
+          output += "<h3>"+title+"</h3>";
+          output += "<p>"+content+"</p>";
+          output += "</li>";
+          //console.log("Title:"+title)
+      }
+      $("#list-posts").html(output);
+    }, error: function(error){
+      console.log("Query Error:"+error.message);
+    }
+  });
+}
+
+getPosts();
+
+$("#post-form").submit(function(event){
+  event.preventDefault();
+    var title = $("#post-title").val();
+    var content = $("#post-content").val();
+
+    var newPost = new Post();
+    newPost.set("title", title);
+    newPost.set("content", content);
+
+    newPost.save({
+      success: function(){
+
+      }, error: function(error){
+          console.log("Error:" +error.message);
+      }
+    });
+  });

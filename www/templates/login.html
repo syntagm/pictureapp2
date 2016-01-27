@@ -7,8 +7,13 @@
             </div>
         </div>
         <div class="list">
-            <ion-md-input placeholder="Username" highlight-color="balanced" type="text"></ion-md-input>
-            <ion-md-input placeholder="Password" highlight-color="energized" type="password"></ion-md-input>
+          <form id="login-form">
+                      <center><p><input id="login-username" type="text" placeholder="username"></p></center>
+                      <center><p><input id="login-password" type="password" placeholder="password"></p></center>
+                      <center><p class="button button-small button-energized ink"><input type="submit"></p></center>
+
+          </form>
+          <br />
         </div>
         <div class="padding">
             <button ui-sref="app.profile" class="button button-full button-assertive ink">Login</button>
@@ -20,3 +25,39 @@
         </div>
     </ion-content>
 </ion-view>
+
+<script type="text/javascript">
+Parse.initialize("HPO14qrXOVv8i6NKQq5UJeGx07IUMDGY0fRhtK4z", "P1JI9V8KsBN88X0uwAfGh5FVngz4VU7Gc3GTWtrX");
+  var Post = Parse.Object.extend("Post");
+
+  $("#login-form").submit(function(event){
+      event.preventDefault();
+
+      var username = $("#login-username").val();
+      var password = $("#login-password").val();
+
+      Parse.User.logIn(username, password, {
+          success: function(user){
+              console.log("Login succeeded!");
+              checkLogInStatus();
+          }, error: function(user, error){
+              console.log("Login error:"+error.message);
+          }
+      });
+  });
+
+
+  // Listen for page-show from logout
+  $("#logout").on("page-show", function(event){
+      console.log("Log Out page-show!");
+      // Log Out with Parse
+      Parse.User.logOut();
+      checkLogInStatus();
+  });
+
+  $("#register").on("page-show", function(event){
+      console.log("Showing Register Page!");
+  });
+
+
+</script>

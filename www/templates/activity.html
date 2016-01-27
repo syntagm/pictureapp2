@@ -1,55 +1,82 @@
-<ion-view view-title="Activity">
-    <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
-        <div class="item card-item">
-            <div ui-sref="app.gallery" class="card stable-bg ink ink-dark">
-                <div class="item item-avatar item-text-wrap">
-                    <span class="avatar" style="background-image: url('img/jon-snow.jpg');"></span>
-                    <strong>A N Other</strong> I love it.
-                    <div class="card-footer text-right">
-                        <i class="icon ion-chatbubbles positive"></i> 6
-                        <i class="icon ion-heart assertive"></i> 23
-                        <div class="pull-left">
-                            <i class="icon ion-clock"></i> just now
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="item card-item">
-            <div ui-sref="app.gallery" class="card stable-bg ink ink-dark">
-                <div class="item item-avatar item-text-wrap">
-                    <span class="avatar" style="background-image: url('img/tyrion.jpg');"></span>
-                    <strong>A N Otherr</strong> I Love it.
-                    <div class="card-footer text-right">
-                        <i class="icon ion-chatbubble positive"></i> 2
-                        <i class="icon ion-heart assertive"></i> 4
-                        <div class="pull-left">
-                            <i class="icon ion-clock"></i> 12 mins ago
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="item card-item">
-            <div ui-sref="app.gallery" class="card stable-bg ink ink-dark">
-                <div class="item item-avatar item-text-wrap">
-                    <span class="avatar" style="background-image: url('img/sansa.jpg');"></span>
-                    <strong>A N Other</strong> added a comment <strong>I Love it too.</strong> ...
-                    <a class="image"><img src="img/sansa-snowcastle.png">
-                    </a>
-                    <a class="image"><img src="img/sansa-snowcastle2.jpg">
-                    </a>
-                    <a class="image"><img src="img/sansa-snowcastle3.jpg">
-                    </a>
-                    <div class="card-footer text-right">
-                        <i class="icon ion-chatbubble positive"></i> 2
-                        <i class="icon ion-heart assertive"></i> 4
-                        <div class="pull-left">
-                            <i class="icon ion-clock"></i> 3 hrs ago
-                        </div>
-                    </div>
-                </div>
+<ion-view view-title="Recent Additions">
+  <ion-content ng-class="{expanded:$scope.isExpanded}">
+      <div class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
+          <div class="content">
+              <div class="avatar" style="background-image: url('img/logo.png');"></div>
+              <h3><a class="light">synAPPS Demo</a></h3>
+              <h4>Picture App</h4>
+          </div>
+      </div>
+      <div class="tabs tabs-dark tabs-icon-top static">
+          <a ui-sref="app.activity" class="tab-item">
+              <i class="icon ion-arrow-graph-up-right"></i> Activity
+          </a>
+          <a ui-sref="app.friends" class="tab-item">
+              <i class="icon ion-android-people"></i> Register
+          </a>
+          <a ui-sref="app.gallery" class="tab-item">
+              <i class="icon ion-images"></i> Photos
+          </a>
+      </div>
+        <h4 class="content padding double-padding-x"></h4>
+        <div ui-sref="app.profile" class="card card-gallery item item-text-wrap">
+          <div class="ink energized-bg">
+          <form id="getPosts">
+                  <ul id="list-posts">
+                  List
+                    <li>
+                      <h3></h3>
+                    </li>
+                  </ul>
+              </form>
             </div>
         </div>
     </ion-content>
 </ion-view>
+
+<script type="text/javascript">
+Parse.initialize("HPO14qrXOVv8i6NKQq5UJeGx07IUMDGY0fRhtK4z", "P1JI9V8KsBN88X0uwAfGh5FVngz4VU7Gc3GTWtrX");
+  var Post = Parse.Object.extend("Post");
+
+  function getPosts() {
+  var query = new Parse.Query(Post);
+  query.find({
+    success: function(results){
+      var output ="";
+      for (var i in results){
+            var title = results[i].get("title");
+            var location = results[i].get("location");
+            var content = results[i].get("content");
+            var user = results[i].get("user");
+            // var username = user.get("username"); //this was excluded
+
+            console.log(results[i].get("file"));
+
+            var img = "";
+            if (results[i].get("file")) {
+                var file = results[i].get("file");
+                var url = file.url();
+                console.log("url:"+url);
+                img = "<img src='"+url+"'>";
+            }
+
+            output += "<li>";
+            output += "<h1>"+title+"</h1>";
+            output += "<h2>"+location+"</h2>";
+            // output += "<small>"+username+"</small>"; //this was excluded
+            output += "<h2>"+content+"</h2>";
+            output += img;
+            output += "</li>";
+            output += "<hr>";
+            //console.log("Title:"+title)
+        }
+      $("#list-posts").html(output);
+    }, error: function(error){
+      console.log("Query Error:"+error.message);
+    }
+  });
+}
+
+getPosts();
+
+</script>

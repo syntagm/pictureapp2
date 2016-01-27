@@ -1,10 +1,10 @@
-<ion-view view-title="Profile">
+<ion-view view-title="Posting">
     <ion-content ng-class="{expanded:$scope.isExpanded}">
         <div class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
             <div class="content">
                 <div class="avatar" style="background-image: url('img/logo.png');"></div>
-                <h3><a class="light">Picture App</a></h3>
-                <h4>synAPPS</h4>
+                <h3><a class="light">synAPPS Demo</a></h3>
+                <h4>Picture App</h4>
             </div>
         </div>
         <div class="tabs tabs-dark tabs-icon-top static">
@@ -12,32 +12,75 @@
                 <i class="icon ion-arrow-graph-up-right"></i> Activity
             </a>
             <a ui-sref="app.friends" class="tab-item">
-                <i class="icon ion-android-people"></i> Friends
+                <i class="icon ion-android-people"></i> Register
             </a>
             <a ui-sref="app.gallery" class="tab-item">
                 <i class="icon ion-images"></i> Photos
             </a>
         </div>
-        <h4 class="content padding double-padding-x">Following</h4>
+        <h4 class="content padding double-padding-x">Posting</h4>
         <div class="list animate-fade-slide-in-right">
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/jon-snow.jpg">
-                <h2>A N Other</h2>
-                <p>Lorem ipsum dolor</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/sansa.jpg">
-                <h2>A N Other</h2>
-                <p>Lorem ipsum dolor</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
-            <a ui-sref="app.friends" class="item item-avatar item-icon-right">
-                <img src="img/tyrion.jpg">
-                <h2>A N Other</h2>
-                <p>Lorem ipsum dolor</p>
-                <i class="icon ion-chatbubble muted"></i>
-            </a>
+          <form id="post-form">
+                      <p style="padding-left:10px;"><input id="post-title" placeholder="1.   Enter_Your_Name" type="text"></p>
+                      <p style="padding-left:10px;"><input id="post-location" placeholder="2.   Enter_Location" type="text"></p>
+                      <p style="padding-left:10px;"><textarea id="post-content"></textarea></p>
+                      <p><input id="post-file" type="file"></p>
+                      <p class="button button-energized"><input type="submit"></p>
+                  </form>
         </div>
     </ion-content>
 </ion-view>
+
+<script type="text/javascript">
+  Parse.initialize("HPO14qrXOVv8i6NKQq5UJeGx07IUMDGY0fRhtK4z", "P1JI9V8KsBN88X0uwAfGh5FVngz4VU7Gc3GTWtrX");
+  var Post = Parse.Object.extend("Post")
+
+  $("#post-form").submit(function(event){
+        event.preventDefault();
+          var title = $("#post-title").val();
+          var content = $("#post-content").val();
+          var location = $("#post-location").val();
+          var user = Parse.User.current();
+
+          var newPost = new Post();
+          newPost.set("title", title);
+          newPost.set("content", content);
+          newPost.set("location", location);
+          newPost.set("user", user);
+
+          var fileElement = $("#post-file")[0];
+          var filePath = $("#post-file").val();
+          var fileName = filePath.split("\\").pop();
+
+          if (fileElement.files.length > 0) {
+            var file = fileElement.files[0];
+            var newFile = new Parse.File(fileName, file);
+            newFile.save({
+              success: function() {
+                //
+              }, error: function(file, error){
+                  console.log("File Save Error:"+error.message);
+              }
+            }).then(function(theFile){
+                newPost.set("file", theFile);
+                newPost.save({
+                  success:function(){
+
+                  }, error:function(error){
+                    console.log("Post Save with File Error:"+error.message);
+                  }
+                });
+            });
+          } else {
+            newPost.save({
+              success:function(){
+                getPosts();
+              }, error: function(error){
+                console.log("Error:"+error.message);
+              }
+            });
+          }
+
+
+        });
+</script>

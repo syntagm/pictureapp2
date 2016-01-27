@@ -5794,6 +5794,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
   padding-left: 0;
   height: 34px;
   color: #111;
+  background-color: transparent;
   vertical-align: middle;
   font-size: 14px;
   line-height: 16px; }

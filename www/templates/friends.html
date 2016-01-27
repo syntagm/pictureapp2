@@ -1,5 +1,5 @@
 <ion-view view-title="Register">
-  <ion-content ng-class="{expanded:$scope.isExpanded}">
+  <ion-content ng-class="{expanded:$scope.isExpanded}" class="background3" scroll="true">
       <div class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
           <div class="content">
               <div class="avatar" style="background-image: url('img/logo.png');"></div>
@@ -24,18 +24,13 @@
                       <p style="padding-left:10px;"><input id="register-username" type="text" placeholder="username"></p>
                       <p style="padding-left:10px;"><input id="register-password" type="password" placeholder="password"></p>
                       <p style="padding-left:10px;"><input id="register-password-2" type="password" placeholder="password"></p>
-                      <p class="buttonWrapper buttonDefault buttonBolt"><input type="submit"></p>
-                      <button><a href="#login">Log In Link</a></button>
+                      <p style="padding-left:10px;" class="buttonWrapper buttonDefault buttonBolt"><input type="submit"></p>
+
         </form>
             </br>
             <p> The current user is...</p>
-            <div id="current-user"></div><br/>
-            </br>
-            <div id="logout" class="page">
-              <div class="content">
-                  <h2>Log Out Link</h2>
-              </div>
-          </div>
+            <div id="current-user"></div>
+            <button id="logout" class="button button-small button-border icon-left ion-android-walk button-assertive-900">Log out HERE before leaving</button>
 
       </div>
   </ion-content>
@@ -98,14 +93,18 @@ $("#login-form").submit(function(event){
     });
 });
 
-
-// Listen for page-show from logout
-$("#logout").on("page-show", function(event){
-    console.log("Log Out page-show!");
-    // Log Out with Parse
-    Parse.User.logOut();
-    checkLogInStatus();
+$("#logout").click(function(event) {
+  Parse.User.logOut();
+  console.log("You are now logged out!");
+  checkLogin();
 });
+// Listen for page-show from logout
+// $("#logout").on("page-show", function(event){
+  //  console.log("Log Out page-show!");
+    // Log Out with Parse
+//    Parse.User.logOut();
+//    checkLogInStatus();
+// });
 
 $("#register").on("page-show", function(event){
     console.log("Showing Register Page!");

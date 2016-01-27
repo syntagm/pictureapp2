@@ -1,5 +1,5 @@
 <ion-view view-title="Posting">
-    <ion-content ng-class="{expanded:$scope.isExpanded}">
+    <ion-content ng-class="{expanded:$scope.isExpanded}" class="background3" scroll="true">
         <div class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
             <div class="content">
                 <div class="avatar" style="background-image: url('img/logo.png');"></div>
@@ -24,8 +24,8 @@
                       <p style="padding-left:10px;"><input id="post-title" placeholder="1.   Enter_Your_Name" type="text"></p>
                       <p style="padding-left:10px;"><input id="post-location" placeholder="2.   Enter_Location" type="text"></p>
                       <p style="padding-left:10px;"><textarea id="post-content"></textarea></p>
-                      <p><input id="post-file" type="file"></p>
-                      <p class="button button-energized"><input type="submit"></p>
+                      <p style="padding-left:10px;"><input id="post-file" type="file"></p>
+                      <p style="padding-left:10px;"><input type="submit"><p>
                   </form>
         </div>
     </ion-content>

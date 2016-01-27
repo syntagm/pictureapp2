@@ -84,20 +84,28 @@ textarea, input[type="text"], input[type="password"] {
   padding-left: 0;
   height: 34px;
   color: #111;
-  background-color: #e8f53f;
+  background-color: #fff7d7;
   vertical-align: middle;
   font-size: 14px;
   line-height: 16px; }
 
   input[type=text] {
       padding:5px;
-      border:2px solid #ccc;
+      border:2px solid #5d6482;
+      background-color: #fff7d7;
       -webkit-border-radius: 5px;
       border-radius: 5px;
     }
+    input[type=password] {
+        padding:5px;
+        border:2px solid #5d6482;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+      }
     input[type=submit] {
     padding:5px 15px;
-    background:#ccc;
+    background:#5d6482;
+    color: #e9ecfa;
     border:0 none;
     cursor:pointer;
     -webkit-border-radius: 5px;
@@ -105,7 +113,14 @@ textarea, input[type="text"], input[type="password"] {
 }
 textarea {
     padding:5px;
-    border:2px solid #ccc;
+    border:2px solid #5d6482;
     -webkit-border-radius: 5px;
     border-radius: 5px;
   }
+  .background3.scroll-content {
+      background: url("back1.jpg") no-repeat;
+      background-size: cover;
+      background-position: center;
+      margin: auto;
+      z-index: 2;
+      }

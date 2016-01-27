@@ -3,8 +3,15 @@
         <div class="list half">
             <div ui-sref="app.profile" class="card card-gallery item item-text-wrap">
                 <div class="ink dark-bg">
-                    <h2>Where's Elsa?</h2>
-                    <img class="full-image" src="img/sansa-snowcastle3.jpg">
+                    <h2>From Parse</h2>
+                    <form id="getPosts">
+                            <ul id="list-posts">
+                            List
+                              <li>
+                                <h3></h3>
+                              </li>
+                            </ul>
+                        </form>
                 </div>
                 <div class="item tabs tabs-secondary tabs-icon-left">
                     <a class="tab-item stable-bg assertive">
@@ -19,7 +26,7 @@
             </div>
             <div ui-sref="app.profile" class="card card-gallery item item-text-wrap">
                 <div class="ink dark-bg">
-                    <h2>Hmm. Hope nobody destroys this!</h2>
+                    <h2>Gallery 1</h2>
                     <img class="full-image" src="img/sansa-snowcastle.png">
                 </div>
                 <div class="item tabs tabs-secondary tabs-icon-left">
@@ -37,7 +44,7 @@
         <div class="list half">
             <div ui-sref="app.profile" class="card card-gallery item item-text-wrap">
                 <div class="ink dark-bg">
-                    <h2>Making Olaf a House</h2>
+                    <h2>Gallery 2</h2>
                     <img class="full-image" src="img/sansa-snowcastle2.jpg">
                 </div>
                 <div class="item tabs tabs-secondary tabs-icon-left">
@@ -53,7 +60,7 @@
             </div>
             <div ui-sref="app.profile" class="card card-gallery item item-text-wrap">
                 <div class="ink dark-bg">
-                    <h2>ohai!</h2>
+                    <h2>Gallery 3</h2>
                     <img class="full-image" src="img/sansa-snowcastle4.jpg">
                 </div>
                 <div class="item tabs tabs-secondary tabs-icon-left">
@@ -70,3 +77,45 @@
         </div>
     </ion-content>
 </ion-view>
+<script type="text/javascript">
+Parse.initialize("HPO14qrXOVv8i6NKQq5UJeGx07IUMDGY0fRhtK4z", "P1JI9V8KsBN88X0uwAfGh5FVngz4VU7Gc3GTWtrX");
+  var Post = Parse.Object.extend("Post");
+
+  function getPosts() {
+  var query = new Parse.Query(Post);
+  query.find({
+    success: function(results){
+      var output ="";
+      for (var i in results){
+            var title = results[i].get("title");
+            var location = results[i].get("location");
+            var content = results[i].get("content");
+            var user = results[i].get("user");
+            // var username = user.get("username"); //this was excluded
+
+            console.log(results[i].get("file"));
+
+            var img = "";
+            if (results[i].get("file")) {
+                var file = results[i].get("file");
+                var url = file.url();
+                console.log("url:"+url);
+                img = "<img src='"+url+"'>";
+            }
+
+            output += "<li>";
+            output += img;
+            output += "</li>";
+            output += "<hr>";
+            //console.log("Title:"+title)
+        }
+      $("#list-posts").html(output);
+    }, error: function(error){
+      console.log("Query Error:"+error.message);
+    }
+  });
+}
+
+getPosts();
+
+</script>

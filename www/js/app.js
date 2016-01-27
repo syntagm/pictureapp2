@@ -235,3 +235,9 @@ $("#post-form").submit(function(event){
       }
     });
   });
+
+  $("#logout").click(function(event) {
+    Parse.User.logOut();
+    console.log("You are now logged out!");
+    checkLogin();
+  });
